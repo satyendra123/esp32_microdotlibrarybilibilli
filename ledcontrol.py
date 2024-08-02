@@ -1477,67 +1477,36 @@ def do_connect():
         return True
 
 2) main.py
-from lib.microdot import Microdot
-from common.connect_wifi import do_connect
-from machine import Pin
-light = Pin(2,Pin.OUT)
-do_connect()
-app = Microdot()
-@app.get('/on')
-def index(request):
-    light.value(1)
-    return "off"
-​
-@app.get('/off')
-def index(request):
-    light.value(0)
-    return "on"
-app.run(host='0.0.0.0', port=5000, debug=False, ssl=None)
-3) 
 from lib.microdot import Microdot,send_file
 from common.connect_wifi import do_connect
 from machine import Pin
+import os
 light = Pin(2,Pin.OUT)
 do_connect()
 app = Microdot()
-​
+
 @app.route('/')
 def index(request):
-    return send_file('public/index.html')
-​
-@app.get('/on')
-def index(request):
-    light.value(1)
-    return "开灯了"
-​
-@app.get('/off')
-def index(request):
-    # 如果收到get请求off就关灯
-    light.value(0)
-    return "关灯了"
-​
-app.run(host='0.0.0.0', port=5000, debug=False, ssl=None)
+    return send_file('public/index.html')
+@app.post('/on')
+def turn_on(request):
+    light.value(1)
+    return "on"
+@app.post('/off')
+def turn_off(request):
+    light.value(0)
+    return "off"
+app.run(host='0.0.0.0', port=5000, debug=True, ssl=None)
 
-4-a) index.html
+3-a) index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
-    <title>ESP32 Relay Control</title>
-</head>
-<body>
-    <h1>Control the LED</h1>
-    <button class="on">On</button>
-    <button class="off">Off</button>
-<script src="./script.js"></script>
-</body>
-</html>
-
-4-b) style.css
-* {
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <style>
+ * {
     margin: 0;
     padding: 0;
 }
@@ -1547,11 +1516,18 @@ button {
     height: 100px;
 }
 
-4-c) script.js
-const onBtn = document.querySelector(".on");
-onBtn.addEventListener("click", (e) => {
+ </style>
+ <title>ESP32 Relay Control</title>
+</head>
+<body>
+  <h1>Control the LED</h1>
+  <button class="on">On</button>
+  <button class="off">Off</button>
+  <script>
+  const onBtn = document.querySelector(".on");
+onBtn.addEventListener("click", () => {
     fetch("/on", {
-        method: "GET",
+        method: "POST",
     }).then(response => {
         console.log("Response:", response);
     }).catch(error => {
@@ -1560,10 +1536,17 @@ onBtn.addEventListener("click", (e) => {
 });
 
 const offBtn = document.querySelector(".off");
-offBtn.addEventListener("click", (e) => {
-    fetch("/off").then(response => {
+offBtn.addEventListener("click", () => {
+    fetch("/off", {
+        method: "POST",
+    }).then(response => {
         console.log("Response:", response);
     }).catch(error => {
         console.log("Error:", error);
     });
 });
+
+  </script>
+</body>
+</html>
+
