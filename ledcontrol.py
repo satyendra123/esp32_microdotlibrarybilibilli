@@ -1454,28 +1454,28 @@ import time
 import network
 light = Pin(2,Pin.OUT)
 def do_connect():
-    wlan = network.WLAN(network.STA_IF)
-    wlan.active(True)
-    print("...")
-    print("...")
-    start_time = time.time()
-    if not wlan.isconnected():       
-        wlan.connect("Xiaomi_A246","zy415415666")
-        while not wlan.isconnected():
-            light.value(1)
-            time.sleep(1)
-            light.value(0)
-            time.sleep(1)
-            if time.time() - start_time > 15:
-                print("wifi！！！")
-                break
-        return False
-    else:
-        print("wifi！！！！")
-        light.value(0)
-        print("ip:",wlan.ifconfig())
-        return True
-​
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    print("...")
+    print("...")
+    start_time = time.time()
+    if not wlan.isconnected():
+        wlan.connect("Airtel_zerotouch","Airtel@123")
+        while not wlan.isconnected():
+            light.value(1)
+            time.sleep(1)
+            light.value(0)
+            time.sleep(1)
+            if time.time() - start_time > 15:
+                print("wifi！！！")
+                break
+        return False
+    else:
+        print("wifi！！！！")
+        light.value(0)
+        print("ip:",wlan.ifconfig())
+        return True
+
 2) main.py
 from lib.microdot import Microdot
 from common.connect_wifi import do_connect
