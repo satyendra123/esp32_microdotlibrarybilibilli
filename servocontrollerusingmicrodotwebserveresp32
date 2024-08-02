@@ -1,6 +1,7 @@
 #ex-1 control relay
 a) lib -> microdot.py （microdot-main\src中）= means lib folder ke andar microdot.py ka file rakhenge hum nikal kar microdot-main folder ke andar src folder hai uske andar file hai waha se nikalkar
-b) common ->connect_wifi.py = hum command name se ek folder banayenge aur uske andar connect_wifi.py ka ek file rakhenge
+b) common -> 1.a) connect_wifi.py = hum command name se ek folder banayenge aur uske andar connect_wifi.py ka ek file rakhenge
+             1. b) servo.py = library for servo motor
 c) public -> index.html = public folder ke andar hum ek file rakhenge index.html file ka
 d) main.py
 
