@@ -50,50 +50,52 @@ def index(request):
     return "on"
 app.run(host='0.0.0.0', port=5000, debug=False, ssl=None)
 
-3) index.html
+3-a) index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>esp32 relay controller</title>
-    <style>
-        *{margin: 0;
-        padding: 0;}
-        button{
-            width: 200px;
-            height: 200px;
-        }
-    </style>
+    <link rel="stylesheet" href="./style.css">
+    <title>ESP32 Relay Control</title>
 </head>
 <body>
-    <h1>开灯小网页</h1>
-    <button class="on">
-        开灯
-    </button>
-    <button class="off">
-        关灯
-    </button>
-    <script>
-        const onBtn = document.querySelector(".on");
-        const offBtn = document.querySelector(".off");
-        onBtn.addEventListener("click",(e)=>{
-            fetch("/on",{
-                method:"get",
-            }).then(e=>{
-                console.log("消息",e);
-            }).catch(error=>{
-                console.log("报错了",error);
-            })
-        })
-        offBtn.addEventListener("click",(e)=>{
-            fetch("/off").then(e=>{
-                console.log("消息",e);
-            }).catch(error=>{
-                console.log("报错了",error);
-            })
-        })
-    </script>
+    <h1>Control the LED</h1>
+    <button class="on">On</button>
+    <button class="off">Off</button>
+<script src="./script.js"></script>
 </body>
 </html>
+
+3-b) style.css
+* {
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    width: 100px;
+    height: 100px;
+}
+
+3-c) script.js
+const onBtn = document.querySelector(".on");
+onBtn.addEventListener("click", (e) => {
+    fetch("/on", {
+        method: "GET",
+    }).then(response => {
+        console.log("Response:", response);
+    }).catch(error => {
+        console.log("Error:", error);
+    });
+});
+
+const offBtn = document.querySelector(".off");
+offBtn.addEventListener("click", (e) => {
+    fetch("/off").then(response => {
+        console.log("Response:", response);
+    }).catch(error => {
+        console.log("Error:", error);
+    });
+});
