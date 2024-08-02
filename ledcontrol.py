@@ -49,8 +49,43 @@ def index(request):
     light.value(0)
     return "on"
 app.run(host='0.0.0.0', port=5000, debug=False, ssl=None)
+3) 
+# 导入Microdot
+from lib.microdot import Microdot,send_file
+# 连接wifi
+from common.connect_wifi import do_connect
+# 导入引脚
+from machine import Pin
+# esp32 引脚2是一颗自带的 led的灯
+light = Pin(2,Pin.OUT)
+​
+# 开始连接wifi
+do_connect()
+# 实例化这个类
+app = Microdot()
+​
+# 返回一个网页
+@app.route('/')
+def index(request):
+    return send_file('public/index.html')
+​
+# 设置一个get请求 如果
+@app.get('/on')
+def index(request):
+    # 如果收到get请求on就开灯
+    light.value(1)
+    return "开灯了"
+​
+@app.get('/off')
+def index(request):
+    # 如果收到get请求off就关灯
+    light.value(0)
+    return "关灯了"
+​
+# 端口号为5000
+app.run(host='0.0.0.0', port=5000, debug=False, ssl=None)
 
-3-a) index.html
+4-a) index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,7 +103,7 @@ app.run(host='0.0.0.0', port=5000, debug=False, ssl=None)
 </body>
 </html>
 
-3-b) style.css
+4-b) style.css
 * {
     margin: 0;
     padding: 0;
@@ -79,7 +114,7 @@ button {
     height: 100px;
 }
 
-3-c) script.js
+4-c) script.js
 const onBtn = document.querySelector(".on");
 onBtn.addEventListener("click", (e) => {
     fetch("/on", {
